@@ -17,5 +17,5 @@ SECTIONS
   .data :
   {
     *(.data)
-  } >SRAM
+  } > SRAM
 }
