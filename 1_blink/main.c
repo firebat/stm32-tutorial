@@ -14,6 +14,7 @@
   +---------------+ 0xA0000000
   |               |
   | External RAM  |
+  |               |
   +---------------+ 0x60000000
   | Peripherlals  |
   +---------------+ 0x40000000
@@ -30,41 +31,43 @@
   • Address 0x00000000: Starting value of R13 (the SP)
   • Address 0x00000004: Reset vector (the starting address of program execution)
 
-  +-------+     +------------+------------+     +--------------+---+---+
-  | Reset |---->| 0x00000000 | 0x00000004 |---->| reset vector |...|...|
-  +-------+     +------------+------------+     +--------------+---+---+
+               Fetch initial   Fetch reset +----+ Instruction
+                 SP value        vector    |    V    fetch
+  +-------+   +--------------+--------------+  +--------------+---+---+
+  | Reset |---|  0x00000000  |  0x00000004  |--| reset vector |xxx|xxx|
+  +-------+   +--------------+--------------+  +--------------+---+---+
 
  
              +------------------+
              |                  |
              |   Other momory   |
              |                  |
-             +------------------+--+  <------ Initial SP <--+
- 0x20008000  | 1st stacked item |  |                        |
-             +------------------+  |                        |
-             | 2nd stacked item |   > Stack memory          |
-             +------------------+  |                        |
-             |        ...       |  |                        |
-             +------------------+--+                        |
-             |                  |                           |
-             |   Other memory   |                           |
-             |                  |                           |
-             +------------------+                           |
-             | xxxxxxxxxxxxxxxx |                           |
-             | xxxxxxxxxxxxxxxx |                           |
-             +------------------+                           |
-             |                  |                           |
-             |      Flash       |                           |
-             | +--------------+ |                           |
-  0x00000100 | |  Boot code   | | <--+                      |
-             +------------------+    |                      |
-             | Other exception  |    | Reset                |
-             |     vectors      |    | vector               |
-             +------------------+    |                      |
-  0x00000004 |    0x00000101    | ---+                      |
-             +------------------+                           |
-  0x00000000 |    0x20008000    | --------------------------+
-             +------------------+
+  0x20008000 +------------------+--+  <-- Initial SP <-+
+             | 1st stacked item |  |      0x20008000   |
+             +------------------+  |                   |
+             | 2nd stacked item |   > Stack memory     |
+             +------------------+  |                   |
+             |        ...       |  |                   |
+             +------------------+--+                   |
+             |                  |                      |
+             |   Other memory   |                      |
+             |                  |                      |
+             +------------------+                      |
+             |xxxxxxxxxxxxxxxxxx|                      |
+             |xxxxxxxxxxxxxxxxxx|                      |
+             +------------------+                      |
+             |                  |                      |
+             |      Flash       |                      |
+             |+----------------+|                      |
+             ||   Boot code    || <--+                 |
+  0x00000100 +------------------+    |                 |
+             | Other exception  |    | Reset           |
+             |     vectors      |    | vector          |
+             +------------------+    |                 |
+             |    0x00000101    | ---+                 |
+  0x00000004 +------------------+                      |
+             |    0x20008000    | ---------------------+
+  0x00000000 +------------------+
 
   Because the stack operation in the Cortex-M3 is a full descending stack (SP decrement before
   store), the initial SP value should be set to the first memory after the top of the stack region. For
@@ -72,7 +75,8 @@
   value should be set to 0x20008000
  */
 
-// Stack size = 0x20001000-0x20000000 = 0x1000 = 4K, that's enough.
+// STM32F103C8T6 only has a 20k SRAM, so MSP must be less than 0x20005000.
+// For example, stack size = 0x20001000-0x20000000 = 0x1000 = 4K, that's enough.
 __asm__(".word 0x20001000");
 __asm__(".word main");
 
