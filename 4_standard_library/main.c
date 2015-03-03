@@ -2,15 +2,11 @@
 
 void GPIO_Configuration(void)
 {
-  GPIO_InitTypeDef gpio;
+  GPIO_InitTypeDef gpioc_init = {GPIO_Pin_13, GPIO_Speed_50MHz, GPIO_Mode_Out_PP};
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 
-  gpio.GPIO_Pin = GPIO_Pin_13;
-  gpio.GPIO_Mode = GPIO_Mode_Out_PP;
-  gpio.GPIO_Speed = GPIO_Speed_50MHz;
-
-  GPIO_Init(GPIOC, &gpio);
+  GPIO_Init(GPIOC, &gpioc_init);
 }
 
 
