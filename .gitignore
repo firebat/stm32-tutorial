@@ -1,4 +1,8 @@
 *.o
 *.elf
 *.bin
+*.hex
+*.cmake
 
+CMakeCache.txt
+CMakeFiles/
