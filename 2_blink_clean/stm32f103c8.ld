@@ -9,8 +9,8 @@ SECTIONS
   /* program code into FLASH */
   .text :
   {
-    *(.vector_table)    /* Vector table */
-    *(.text)            /* Program code */
+    *(.isr_vector)    /* Vector table */
+    *(.text)          /* Program code */
   } > FLASH
 
   /* uninitialized global and static variables into SRAM */

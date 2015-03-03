@@ -9,7 +9,7 @@ void HardFaultException(void);
 
 typedef void (*pfnISR)(void);
 
-__attribute__((section(".vector_table")))
+__attribute__((section(".isr_vector")))
 pfnISR VectorTable[] = 
 {
   (pfnISR) STACK_TOP,

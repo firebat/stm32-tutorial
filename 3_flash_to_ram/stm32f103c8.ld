@@ -4,22 +4,19 @@ MEMORY
   FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 64K
 }
 
+__stack_size = 1024;
+_estack = ORIGIN(SRAM) + LENGTH(SRAM);
+_sstack = _estack - __stack_size;
+
 SECTIONS
 {
-
-  /* Reset and ISR vectors */
-  .isr_vector :
-  {
-    _isr_vector = .;
-    KEEP(*(.isr_vector))
-    ASSERT(. != _isr_vector, "The .isr_vector section is empty");
-  } > FLASH
-
-
   /* Text section (code and read-only data) */
   .text :
   {
-    _text = .;
+    /* Reset and ISR vectors */
+    KEEP(*(.isr_vector))
+
+    . = ALIGN(4);
     *(.text)    /* code */
     *(.rodata)  /* read only data */
     . = ALIGN(4);
@@ -29,30 +26,29 @@ SECTIONS
 
   /* Initialized data section. This section is programmed into FLASH (LMA address)
      and copied to RAM (VMA address) in startup code. */
-  .data : AT (_etext)   /* LMA address (in FLASH) */
+  .data :   
   {
-    _data = .;          /* data section VMA address */
+    . = ALIGN(4);
+    _sdata = .;         /* data section VMA address */
     *(.data)
     . = ALIGN(4);
     _edata = .;
-  } > SRAM
+  } > SRAM AT> FLASH    /* LMA address (in FLASH) */
 
 
   /* Uninitialized data section (zeroed out by startup code) */
-  .bss (NOLOAD) :
+  .bss :
   {
-    _bss = .;
+    . = ALIGN(4);
+    _sbss = .;
     *(.bss)
     . = ALIGN(4);
     _ebss = .;
   } > SRAM
 
-  _end = .;
+  . = _sstack;
+  .stack :
+  {
+    . = . + __stack_size;
+  } > SRAM
 }
-
-
-/* Nice to have */
-__isr_vector_size = SIZEOF(.isr_vector);
-__text_size = SIZEOF(.text);
-__data_size = SIZEOF(.data);
-__bss_size = SIZEOF(.bss);
