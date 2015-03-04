@@ -1,0 +1,28 @@
+#!/bin/bash
+
+burn() {
+  if [[ "$1" == "" ]];then
+    echo "Usage: stm32 burn <file>"
+    exit
+  fi
+  file=$PWD/$1
+
+  if [[ ! -r "$file" ]];then
+    echo "Binary file $1 cannot be opened."
+    exit 1
+  fi
+
+  cat <<EOF | JLinkExe
+exec device=STM32F103C8
+loadbin main.bin, 0x8000000
+EOF
+}
+
+
+case "$1" in
+  burn)
+    burn "$2"
+    ;;
+  *)
+    echo $"Usage: $0 burn"
+esac

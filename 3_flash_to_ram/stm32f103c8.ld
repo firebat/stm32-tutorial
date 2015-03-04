@@ -26,7 +26,7 @@ SECTIONS
 
   /* Initialized data section. This section is programmed into FLASH (LMA address)
      and copied to RAM (VMA address) in startup code. */
-  .data :   
+  .data :
   {
     . = ALIGN(4);
     _sdata = .;         /* data section VMA address */

@@ -5,10 +5,11 @@ SET(PERIPH_LIB /home/$ENV{USER}/libraries/STM32F10x_StdPeriph_Lib_V3.5.0/)
 SET(PERIPH_LIB_SRC ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/src/)
 
 INCLUDE_DIRECTORIES(
-    ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
-    ${PERIPH_LIB}/Libraries/CMSIS/CM3/CoreSupport/
-    ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/inc/
-    ${PERIPH_LIB}/Project/STM32F10x_StdPeriph_Template
+  ./
+  ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
+  ${PERIPH_LIB}/Libraries/CMSIS/CM3/CoreSupport/
+  ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/inc/
+  ${PERIPH_LIB}/Project/STM32F10x_StdPeriph_Template
 )
 
 SET(CMAKE_VERBOSE_MAKEFILE 0)
@@ -21,12 +22,12 @@ SET(LINK_SCRIPT "stm32f10x.ld")
 SET(FAMILY "STM32F10X_HD")
 
 SET(STARTUP
-    startup_stm32f10x.c
-    ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c
-    ${PERIPH_LIB_SRC}/stm32f10x_rcc.c
-    ${PERIPH_LIB_SRC}/stm32f10x_gpio.c
-    ${PERIPH_LIB_SRC}/stm32f10x_usart.c
-    ${PERIPH_LIB_SRC}/misc.c
+  startup_stm32f10x.c
+  ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c
+  ${PERIPH_LIB_SRC}/stm32f10x_rcc.c
+  ${PERIPH_LIB_SRC}/stm32f10x_gpio.c
+  ${PERIPH_LIB_SRC}/stm32f10x_usart.c
+  ${PERIPH_LIB_SRC}/misc.c
 )
 
 #SET(DEBUG_FLAGS "-O3")
@@ -47,8 +48,9 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 cmake_policy(SET CMP0015 OLD)
 ADD_EXECUTABLE(${PROJECT_NAME}.elf ${PROJECT_NAME}.c ${STARTUP})
 
-add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.hex COMMAND ${CMAKE_OBJCOPY} -Oihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex)
 add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.bin COMMAND ${CMAKE_OBJCOPY} -Obinary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin)
-
 add_custom_target(generate_bin ALL DEPENDS ${PROJECT_NAME}.bin)
+
+#add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.hex COMMAND ${CMAKE_OBJCOPY} -Oihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex)
 #add_custom_target(generate_hex ALL DEPENDS ${PROJECT_NAME}.hex)
+

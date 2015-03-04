@@ -5,4 +5,5 @@
 *.cmake
 
 CMakeCache.txt
-CMakeFiles/
+CMakeFiles
+test
