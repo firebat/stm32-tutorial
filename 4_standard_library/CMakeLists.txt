@@ -1,15 +1,14 @@
 PROJECT(main)
 cmake_minimum_required(VERSION 2.6)
 
-SET(PERIPH_LIB /home/$ENV{USER}/libraries/STM32F10x_StdPeriph_Lib_V3.5.0/)
-SET(PERIPH_LIB_SRC ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/src/)
+SET(PERIPH_LIB $ENV{HOME}/libraries/STM32F10x_StdPeriph_Lib_V3.5.0)
+SET(PERIPH_LIB_SRC ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/src)
 
 INCLUDE_DIRECTORIES(
   ./
-  ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
-  ${PERIPH_LIB}/Libraries/CMSIS/CM3/CoreSupport/
-  ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/inc/
-  ${PERIPH_LIB}/Project/STM32F10x_StdPeriph_Template
+  ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x
+  ${PERIPH_LIB}/Libraries/CMSIS/CM3/CoreSupport
+  ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/inc
 )
 
 SET(CMAKE_VERBOSE_MAKEFILE 0)
@@ -18,7 +17,7 @@ SET(CMAKE_BUILD_TYPE DEBUG)
 SET(CMAKE_C_COMPILER "arm-none-eabi-gcc")
 SET(CMAKE_LINKER "arm-none-eabi-ld")
 SET(CMAKE_OBJCOPY "arm-none-eabi-objcopy")
-SET(LINK_SCRIPT "stm32f10x.ld")
+SET(LINK_SCRIPT "../stm32f10x.ld")
 SET(FAMILY "STM32F10X_HD")
 
 SET(STARTUP
@@ -51,6 +50,7 @@ ADD_EXECUTABLE(${PROJECT_NAME}.elf ${PROJECT_NAME}.c ${STARTUP})
 add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.bin COMMAND ${CMAKE_OBJCOPY} -Obinary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin)
 add_custom_target(generate_bin ALL DEPENDS ${PROJECT_NAME}.bin)
 
-#add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.hex COMMAND ${CMAKE_OBJCOPY} -Oihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex)
-#add_custom_target(generate_hex ALL DEPENDS ${PROJECT_NAME}.hex)
+add_custom_command(DEPENDS ${PROJECT_NAME}.elf OUTPUT ${PROJECT_NAME}.hex COMMAND ${CMAKE_OBJCOPY} -Oihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex)
+add_custom_target(generate_hex ALL DEPENDS ${PROJECT_NAME}.hex)
 
+add_custom_target(burn ../stm32 burn ${PROJECT_NAME}.bin depends ${PROJECT_NAME}.bin)
