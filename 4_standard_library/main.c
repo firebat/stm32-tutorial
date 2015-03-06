@@ -20,9 +20,9 @@ int main(void)
   GPIO_Configuration();
 
   while (1) {
-    GPIO_SetBits(GPIOC, GPIO_Pin_13);
+    GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET);
     delay(500000);
-    GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+    GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_RESET);
     delay(500000);
   }
 }
