@@ -5,7 +5,7 @@ SET(PERIPH_LIB $ENV{HOME}/libraries/STM32F10x_StdPeriph_Lib_V3.5.0)
 SET(PERIPH_LIB_SRC ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/src)
 
 INCLUDE_DIRECTORIES(
-  ./
+  ../
   ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x
   ${PERIPH_LIB}/Libraries/CMSIS/CM3/CoreSupport
   ${PERIPH_LIB}/Libraries/STM32F10x_StdPeriph_Driver/inc
@@ -21,7 +21,7 @@ SET(LINK_SCRIPT "../stm32f10x.ld")
 SET(FAMILY "STM32F10X_HD")
 
 SET(STARTUP
-  startup_stm32f10x.c
+  ../startup_stm32f10x.c
   ${PERIPH_LIB}/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c
   ${PERIPH_LIB_SRC}/stm32f10x_rcc.c
   ${PERIPH_LIB_SRC}/stm32f10x_gpio.c
