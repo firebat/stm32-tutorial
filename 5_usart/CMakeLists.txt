@@ -18,7 +18,7 @@ SET(CMAKE_C_COMPILER "arm-none-eabi-gcc")
 SET(CMAKE_LINKER "arm-none-eabi-ld")
 SET(CMAKE_OBJCOPY "arm-none-eabi-objcopy")
 SET(LINK_SCRIPT "../stm32f10x.ld")
-SET(FAMILY "STM32F10X_HD")
+SET(FAMILY "STM32F10X_MD_VL")
 
 SET(STARTUP
   ../startup_stm32f10x.c
@@ -26,7 +26,7 @@ SET(STARTUP
   ${PERIPH_LIB_SRC}/stm32f10x_rcc.c
   ${PERIPH_LIB_SRC}/stm32f10x_gpio.c
   ${PERIPH_LIB_SRC}/stm32f10x_usart.c
-  ${PERIPH_LIB_SRC}/misc.c
+#  ${PERIPH_LIB_SRC}/misc.c
 )
 
 #SET(DEBUG_FLAGS "-O3")
